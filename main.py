@@ -12,9 +12,7 @@ from telegram.ext import MessageHandler, Defaults, ApplicationBuilder, filters, 
 
 from config import TOKEN, ADMINS, LLM_PATH
 
-from message import start, handle_message
-
-llm = GPT4All(model=LLM_PATH)
+from message import start, handle_message, create_llm
 
 
 def add_logging():
@@ -32,7 +30,10 @@ def add_logging():
 
 if __name__ == "__main__":
 
-    add_logging()
+   # add_logging()
+
+
+
 
     if version_info >= (3, 8) and platform.lower().startswith("win"):
         set_event_loop_policy(WindowsSelectorEventLoopPolicy())
@@ -42,6 +43,7 @@ if __name__ == "__main__":
            .persistence(PicklePersistence(filepath="persistence"))
            .read_timeout(50).get_updates_read_timeout(50)
            .build())
+
 
     app.add_handler(CommandHandler("start", start, filters.Chat(ADMINS)))
 
