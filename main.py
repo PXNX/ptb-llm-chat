@@ -12,7 +12,7 @@ from telegram.ext import MessageHandler, Defaults, ApplicationBuilder, filters, 
 
 from config import TOKEN, ADMINS, LLM_PATH
 
-from message import start, handle_message, create_llm
+from message import start, handle_message
 
 
 def add_logging():
