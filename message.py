@@ -5,6 +5,7 @@ from langchain.chains.conversation.base import ConversationChain
 from langchain.chains.llm import LLMChain
 from langchain.memory import ConversationBufferMemory
 from langchain_community.llms.gpt4all import GPT4All
+from langchain_core.outputs import LLMResult
 from langchain_core.prompts import PromptTemplate
 from telegram import Update, Bot
 from telegram.ext import CallbackContext
@@ -24,14 +25,9 @@ class TelegramEditCallbackHandler(BaseCallbackHandler):
         self.message_id = message_id
         self.token_buffer = []
 
-    def on_llm_new_token(self, token: str, **kwargs) -> None:
-        """Called whenever a new token is generated."""
-        self.token_buffer.append(token)
-
-        # Edit the message after every 10 tokens
-        if len(self.token_buffer) % 36 == 0:
-            new_text = ''.join(self.token_buffer)
-            asyncio.create_task( self.context.bot.edit_message_text(chat_id=self.chat_id, message_id=self.message_id, text=new_text))
+    def on_llm_end(self, result: LLMResult, **kwargs) -> None:
+        print(result)
+        asyncio.create_task( self.context.bot.edit_message_text(chat_id=self.chat_id, message_id=self.message_id, text=result.generations[0][0].text))
 
 
 async def start(update: Update, context: CallbackContext):
@@ -46,8 +42,10 @@ async def handle_message(update: Update, context: CallbackContext):
         chat_id=update.effective_chat.id,
         message_id=msg.message_id
     )
-    llm = GPT4All(model=LLM_PATH,max_tokens=512,callbacks=[callback_handler])
-    prompt = PromptTemplate(input_variables=["input_text"], template="{input_text}")
+    llm = GPT4All(model=LLM_PATH,max_tokens=256,)
+    prompt = PromptTemplate(input_variables=["input_text"], template="You are a helpful assistant for the user. The user is a syrian girl named Ghazal. The user studies linguistics at university. Only provide a single response. Don'T spin the dialog further. Only return your response after <|assistant|>.\nUser: {input_text}")
     chain = prompt | llm
 
-    chain.invoke({"input_text": update.message.text})
+    response = chain.invoke({"input_text": update.message.text})
+    print(response)
+    await msg.edit_text(response)
