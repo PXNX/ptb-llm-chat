@@ -1,6 +1,6 @@
 from ollama import ChatResponse
 from ollama import chat
-from telegram import Update, Bot
+from telegram import Update
 from telegram.ext import CallbackContext
 
 
@@ -17,4 +17,8 @@ async def handle_message(update: Update, context: CallbackContext):
             'content': update.message.text,
         },
     ])
-    await msg.edit_text(response.message.content)
+
+
+    text = response.message.content.replace("<think>","").replace("</think>","")
+    print(text)
+    await msg.edit_text(text)
