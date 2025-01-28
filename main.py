@@ -45,9 +45,9 @@ if __name__ == "__main__":
            .build())
 
 
-    app.add_handler(CommandHandler("start", start, filters.Chat(ADMINS)))
+    app.add_handler(CommandHandler("start", start,filters.ChatType.PRIVATE))# & filters.Chat(ADMINS)))
 
-    app.add_handler(MessageHandler(filters.Chat(ADMINS) & filters.TEXT, handle_message))
+    app.add_handler(MessageHandler(  filters.ChatType.PRIVATE &filters.TEXT, handle_message)) # filters.Chat(ADMINS) &
 
 
     # Commands have to be added above
