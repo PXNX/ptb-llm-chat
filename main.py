@@ -23,6 +23,7 @@ def add_logging():
         level=logging.INFO,
         datefmt='%Y-%m-%d %H:%M:%S'
     )
+    logging.getLogger("httpx").setLevel(logging.WARNING)
 
 
 if __name__ == "__main__":
