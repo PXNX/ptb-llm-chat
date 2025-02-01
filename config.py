@@ -10,7 +10,9 @@ TOKEN: Final[str] = os.getenv('TELEGRAM')
 OPENAPI: Final[str] = os.getenv('OPENAPI')
 LLM_PATH: Final[str] = os.getenv('LLM_PATH')
 PORT: Final[int] = int(os.getenv("PORT", 8080))
-ADMINS: Final[List[str]] = loads(os.getenv('ADMINS'))
+ADMINS: Final[List[int]] = loads(os.getenv('ADMINS'))
+
+TELEGRAM_EDIT_DELAY = 8
 
 
 

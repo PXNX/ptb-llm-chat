@@ -7,11 +7,9 @@ from typing import Final
 
 from telegram import LinkPreviewOptions
 from telegram.constants import ParseMode
-from telegram.ext import MessageHandler, Defaults, ApplicationBuilder, filters, CommandHandler, PicklePersistence, \
-    Application
+from telegram.ext import MessageHandler, Defaults, ApplicationBuilder, filters, CommandHandler, PicklePersistence
 
-from config import TOKEN, ADMINS, LLM_PATH
-
+from config import TOKEN, ADMINS
 from message import start, handle_message
 
 
@@ -25,15 +23,10 @@ def add_logging():
         level=logging.INFO,
         datefmt='%Y-%m-%d %H:%M:%S'
     )
-    logging.getLogger("httpx").setLevel(logging.WARNING)
 
 
 if __name__ == "__main__":
-
-   # add_logging()
-
-
-
+    add_logging()
 
     if version_info >= (3, 8) and platform.lower().startswith("win"):
         set_event_loop_policy(WindowsSelectorEventLoopPolicy())
@@ -44,11 +37,9 @@ if __name__ == "__main__":
            .read_timeout(50).get_updates_read_timeout(50)
            .build())
 
+    app.add_handler(CommandHandler("start", start, filters.Chat(ADMINS)))
 
-    app.add_handler(CommandHandler("start", start,filters.ChatType.PRIVATE))# & filters.Chat(ADMINS)))
-
-    app.add_handler(MessageHandler(  filters.ChatType.PRIVATE &filters.TEXT, handle_message)) # filters.Chat(ADMINS) &
-
+    app.add_handler(MessageHandler( filters.Chat(ADMINS) & filters.TEXT, handle_message))
 
     # Commands have to be added above
     #  app.add_error_handler( report_error)  # comment this one out for full stacktrace
