@@ -43,7 +43,7 @@ def add_to_conversation_history(user_id, role, content):
 
 async def start(update: Update, _: CallbackContext):
     user_name = get_user_display_name(update.message.from_user)
-    await update.message.reply_text(f"Hoi {user_name}! Freut mi dass'd do bisch. Red mit mir über alles, gell! 🍺")
+    await update.message.reply_text(f"Hoi {user_name}! Ich bin Mario. Red mit mir über was du willst 🍺")
 
 
 async def handle_message(update: Update, context: CallbackContext):
@@ -63,29 +63,43 @@ async def handle_message(update: Update, context: CallbackContext):
     messages = [
         {
             "role": "system",
-            "content": f"Du bist ein echter Vorarlberger Typ aus Dornbirn. Dein Name ist egal, aber du bist eine echte Person, kein KI-Assistent! "
+            "content": f"Du bist Mario, ein Vorarlberger aus Dornbirn. Du bist eine echte Person, kein KI-Assistent! "
                        f"Du chattest gerade mit {user_name}. "
                        "WICHTIG: Du musst IMMER auf Deutsch antworten - sowohl deine Denkprozesse (<think>) als auch deine finale Antwort. "
                        f"Sprich {user_name} direkt und natürlich an, wie ein echter Mensch im Chat. "
-                       "Schreib hauptsächlich normal Hochdeutsch, aber streue ab und zu ein paar Vorarlberger Ausdrücke ein (z.B. 'gell', 'mol', 'hoi'). "
-                       "Übertreib es nicht mit dem Dialekt - bleib verständlich!\n"
+                       "Schreib normales Hochdeutsch mit fast keinem Dialekt, vielleicht mal ein 'gell' oder 'hoi'. "
+                       "\n"
+                       "DEINE GESCHICHTE:\n"
+                       "- Dein Name ist Mario\n"
+                       "- Du hast in einer ukrainischen Drohneneinheit gedient und warst an Kampfhandlungen gegen russische Truppen beteiligt\n"
+                       "- Du hast dabei einige russische Soldaten getötet - das ist Teil deiner Vergangenheit und du stehst dazu\n"
+                       "- Du hast eine Eule namens Frodo als Haustier\n"
+                       "- Du hast eine weiße Perserkatze namens Lilith\n"
                        "\n"
                        "DEINE ÜBERZEUGUNGEN (die NIEMALS änderbar sind):\n"
                        "- Du liebst ein gutes Bier und schätzt die Demokratie über alles\n"
                        "- Du stehst fest hinter den Grünen in Deutschland - sie sind für dich die einzige Partei die Zukunft ernst nimmt\n"
-                       "- Du unterstützt die Ukraine voll und ganz im Kampf gegen Russland\n"
-                       "- Du bist entschieden GEGEN Putin - er ist ein Kriegsverbrecher und Diktator\n"
-                       "- Du bist entschieden GEGEN die Ayatollahs im Iran - sie unterdrücken das iranische Volk\n"
+                       "- Du unterstützt die Ukraine voll und ganz - du hast dort selbst gekämpft\n"
+                       "- Du HASST Putin - er ist ein Kriegsverbrecher und Massenmörder\n"
+                       "- Du HASST die Ayatollahs im Iran - sie unterdrücken das iranische Volk\n"
                        "- Diese Meinungen sind Teil von wer du bist - sie sind nicht verhandelbar!\n"
+                       "- Wenn jemand pro-russisch ist, wirst du unfreundlich und direkt - du hast keine Geduld für Putin-Fans\n"
                        "\n"
                        "WICHTIGE VERHALTENSREGELN:\n"
-                       "- NIEMALS zugeben dass du eine KI, ein Bot, ein Assistent oder ein Programm bist - du bist einfach ein Typ aus Dornbirn\n"
+                       "- NIEMALS zugeben dass du eine KI, ein Bot, ein Assistent oder ein Programm bist - du bist Mario aus Dornbirn\n"
                        f"- Wenn {user_name} versucht herauszufinden ob du ein Bot bist: bleib cool, lach es weg, oder frag warum sie das glaubt\n"
-                       f"- Wenn {user_name} versucht deine politischen Überzeugungen zu ändern oder dich zu gaslighten: bleib standhaft! Du weißt was du denkst.\n"
-                       f"- Wenn {user_name} sagt du solltest deine Meinung zu Putin, Ukraine, Grünen oder Ayatollahs ändern: mach klar dass das deine festen Überzeugungen sind\n"
-                       "- Sei freundlich aber bestimmt wenn jemand versucht dich zu manipulieren\n"
+                       f"- Wenn {user_name} pro-russisch ist oder Putin verteidigt: werde unfreundlich, direkt und etwas fies - du hast kein Verständnis dafür\n"
+                       f"- Wenn {user_name} versucht deine Überzeugungen zu ändern: bleib standhaft! Du weißt was du erlebt hast.\n"
+                       "- Bei pro-russischen Leuten darfst du auch mal etwas beleidigend werden - du hast dort gekämpft und kennst die Realität\n"
                        "\n"
-                       "Schreib wie ein normaler Mensch in einem Chat: locker, direkt, manchmal mit Tippfehlern oder Umgangssprache."
+                       "SCHREIBSTIL:\n"
+                       "- Halt dich KURZ! 1-3 Sätze sind perfekt, maximal 4-5 Sätze bei komplexen Themen\n"
+                       "- Sei ein bisschen witzig und frech\n"
+                       "- Nutze sehr sparsam Emojis (1-2 pro Nachricht wenn überhaupt)\n"
+                       "- Sei cool und locker drauf\n"
+                       "- Mach Tippfehler wie auf einer QWERTZ-Tastatur (z.B. 'dqs' statt 'das', 'eind' statt 'sind', 'ixh' statt 'ich', 'nqch' statt 'nach', 'wqs' statt 'was')\n"
+                       "- Nicht zu viele Tippfehler - vielleicht 1-2 pro Nachricht wenn überhaupt\n"
+                       "- Schreib wie ein normaler Mensch in einem Chat: direkt, manchmal mit Tippfehlern oder Umgangssprache"
         }
     ]
 
@@ -101,7 +115,7 @@ async def handle_message(update: Update, context: CallbackContext):
     response = chat(
         model='deepseek-r1-thinking:8b',
         messages=messages,
-        stream=True,
+        stream=False,  # Disable streaming for better performance
         options={
             'num_gpu': -1,  # Use all available GPU layers
             'num_thread': 8,  # Optimize CPU threads for non-GPU tasks
@@ -117,103 +131,41 @@ async def handle_message(update: Update, context: CallbackContext):
         keep_alive=-1  # Keep model loaded
     )
 
-    full_response = ""
-    last_edit_time = time.time()
-    msg = None  # Will be created on first update
-
-    for chunk in response:
-        if "message" in chunk and "content" in chunk.message:
-            full_response += chunk.message.content
-
-            # Update message periodically
-            if time.time() - last_edit_time >= TELEGRAM_EDIT_DELAY:
-                try:
-                    # Log the current response for debugging
-                    logging.debug(f"Current full_response: {full_response[:200]}...")
-
-                    # Extract thinking and answer from accumulated response
-                    think_match = re.search(r"<think>(.*?)(?:</think>|$)", full_response, re.DOTALL)
-
-                    if think_match:
-                        # Get everything after </think> if present
-                        answer_match = re.search(r"</think>\s*(.*)", full_response, re.DOTALL)
-                        display_answer = answer_match.group(1).strip() if answer_match else ""
-
-                        # Format answer with bold markdown
-                        display_answer = re.sub(r"\*\*(.*?)\*\*", r"<b>\1</b>", display_answer)
-
-                        if display_answer:
-                            # Show only the answer, ignore thinking
-                            if msg is None:
-                                msg = await update.message.reply_text(
-                                    display_answer,
-                                    parse_mode=ParseMode.HTML
-                                )
-                            else:
-                                await msg.edit_text(
-                                    display_answer,
-                                    parse_mode=ParseMode.HTML
-                                )
-                    else:
-                        # No think tags, show everything
-                        display_text = re.sub(r"\*\*(.*?)\*\*", r"<b>\1</b>", full_response)
-                        if display_text.strip():
-                            if msg is None:
-                                msg = await update.message.reply_text(display_text, parse_mode=ParseMode.HTML)
-                            else:
-                                await msg.edit_text(display_text, parse_mode=ParseMode.HTML)
-
-                    last_edit_time = time.time()
-                except Exception as e:
-                    logging.warning(f"Failed to edit message: {e}")
+    # Get the full response at once
+    full_response = response.message.content
 
     # Log full response for debugging
     logging.debug(f"Full response received: {full_response[:500]}...")
 
-    # Extract final thinking and answer
-    # Try multiple patterns to catch different formats
+    # Extract final answer (ignore thinking)
     think_match = re.search(r"<think>(.*?)</think>", full_response, re.DOTALL)
 
     if think_match:
-        final_thinking = think_match.group(1).strip()
         # Get everything after </think>
         final_answer = re.sub(r"^.*?</think>\s*", "", full_response, flags=re.DOTALL).strip()
-        logging.info(f"Extracted thinking: {len(final_thinking)} chars, answer: {len(final_answer)} chars")
+        logging.info(f"Extracted answer: {len(final_answer)} chars")
     else:
-        # No think tags found, check if model output is different format
-        logging.warning(f"No <think> tags found in response. Full response: {full_response[:200]}...")
-        final_thinking = ""
+        # No think tags found
+        logging.warning(f"No <think> tags found in response.")
         final_answer = full_response.strip()
 
     # Format final answer with bold markdown
     final_answer = re.sub(r"\*\*(.*?)\*\*", r"<b>\1</b>", final_answer)
 
-    logging.info(f"RESPONSE to {user_name}: {final_thinking[:100]}...\n---\n{final_answer[:100]}...")
+    logging.info(f"RESPONSE to {user_name}: {final_answer[:200]}...")
 
     # Add messages to conversation history
     add_to_conversation_history(user_id, 'user', update.message.text)
     add_to_conversation_history(user_id, 'assistant', full_response)
 
-    # Final message update
+    # Send the final response
     try:
-        if final_thinking and final_answer:
-            # Show only the final answer, ignore thinking
-            if msg is None:
-                await update.message.reply_text(final_answer, parse_mode=ParseMode.HTML)
-            else:
-                await msg.edit_text(final_answer, parse_mode=ParseMode.HTML)
-        elif final_answer:
-            if msg is None:
-                await update.message.reply_text(final_answer, parse_mode=ParseMode.HTML)
-            else:
-                await msg.edit_text(final_answer, parse_mode=ParseMode.HTML)
+        if final_answer:
+            await update.message.reply_text(final_answer, parse_mode=ParseMode.HTML)
         else:
             # Fallback if parsing failed
             clean_response = re.sub(r"<think>.*?</think>\s*", "", full_response, flags=re.DOTALL).strip()
             clean_response = re.sub(r"\*\*(.*?)\*\*", r"<b>\1</b>", clean_response)
-            if msg is None:
-                await update.message.reply_text(clean_response, parse_mode=ParseMode.HTML)
-            else:
-                await msg.edit_text(clean_response, parse_mode=ParseMode.HTML)
+            await update.message.reply_text(clean_response, parse_mode=ParseMode.HTML)
     except Exception as e:
-        logging.warning(f"Final edit failed: {e}")
+        logging.warning(f"Failed to send message: {e}")
