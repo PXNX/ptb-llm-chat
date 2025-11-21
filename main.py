@@ -1,5 +1,5 @@
 import logging
-from asyncio import set_event_loop_policy, WindowsSelectorEventLoopPolicy
+from asyncio import set_event_loop_policy
 from datetime import datetime
 from os import makedirs, path
 from sys import platform, version_info
@@ -28,9 +28,6 @@ def add_logging():
 
 if __name__ == "__main__":
     add_logging()
-
-    if version_info >= (3, 8) and platform.lower().startswith("win"):
-        set_event_loop_policy(WindowsSelectorEventLoopPolicy())
 
     app = (ApplicationBuilder().token(TOKEN)
            .defaults(Defaults(parse_mode=ParseMode.HTML, link_preview_options=LinkPreviewOptions(is_disabled=True)))

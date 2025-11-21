@@ -10,7 +10,7 @@ TOKEN: Final[str] = os.getenv('TELEGRAM')
 PORT: Final[int] = int(os.getenv("PORT", 8080))
 ADMINS: Final[List[int]] = loads(os.getenv('ADMINS'))
 
-TELEGRAM_EDIT_DELAY = 8
+TELEGRAM_EDIT_DELAY = 7
 
 
 

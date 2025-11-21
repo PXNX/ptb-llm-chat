@@ -1,4 +1,4 @@
-python-telegram-bot[job-queue]==21.10
-ollama==0.4.7
-python-dotenv==1.0.1
-regex==2024.11.6
+python-telegram-bot[job-queue]==22.5
+ollama==0.6.1
+python-dotenv==1.2.1
+regex==2025.11.3

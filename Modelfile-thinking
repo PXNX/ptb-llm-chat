@@ -1,0 +1,24 @@
+FROM deepseek-r1:8b
+
+TEMPLATE """{{- if .System }}{{ .System }}{{ end }}
+{{- range $i, $_ := .Messages }}
+{{- $last := eq (len (slice $.Messages $i)) 1 -}}
+{{- if eq .Role "user" }}<｜User｜>{{ .Content }}
+{{- else if eq .Role "assistant" }}<｜Assistant｜>
+{{- if and $last .Thinking }}<think>
+{{ .Thinking }}
+</think>
+{{- end }}{{ .Content }}{{- if not $last }}<｜end▁of▁sentence｜>{{- end }}
+{{- end }}
+{{- if and $last (ne .Role "assistant") }}<｜Assistant｜>
+<think>
+</think>
+{{- end }}
+{{- end }}"""
+
+PARAMETER stop <｜begin▁of▁sentence｜>
+PARAMETER stop <｜end▁of▁sentence｜>
+PARAMETER stop <｜User｜>
+PARAMETER stop <｜Assistant｜>
+PARAMETER temperature 0.6
+PARAMETER top_p 0.95
